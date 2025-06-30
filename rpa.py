@@ -169,3 +169,35 @@ if __name__ == "__main__":
             pais["simbolo_moeda"], pais["idioma"], pais["fuso_horario"],
             pais["bandeira"]
         ])
+
+        # PLANILHA LIVRO
+    planilha2 = wb.create_sheet(title="Livros")
+    cabecalhos_livros = ["Título", "Preço", "Avaliação", "Disponibilidade"]
+    planilha2.append(cabecalhos_livros)
+
+    for livro in livros:  
+        planilha2.append([
+            livro["titulo"],
+            livro["preco"],
+            livro["avaliacao"],
+            livro["disponibilidade"]
+        ])
+
+    #FORMATAÇÃO
+    for cell in planilha1[1] + planilha1[2] + planilha1[3]:
+        cell.font = Font(color='B388FF', bold=True)
+        lilas_borda = Side(style='medium', color='D9B3FF')  
+        cell.border = Border(left=lilas_borda, 
+                     right=lilas_borda,
+                     top=lilas_borda,
+                     bottom=lilas_borda)
+
+    for cell in planilha2[1]:
+        cell.font = Font(color="FF8C00", bold=True)
+        laranja_borda = Side(style='medium', color='FFC891')  
+        cell.border = Border(left=laranja_borda, 
+                     right=laranja_borda,
+                     top=laranja_borda,
+                     bottom=laranja_borda)
+    wb.save("dados-ap2.xlsx")
+    print("Arquivo Excel da AP2 de RPA foi criado com sucesso!!!")
