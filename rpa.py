@@ -38,3 +38,53 @@ def coletar_dados_pais(nome):
         "fuso_horario": info.get("timezones", ["N/A"])[0],
         "bandeira": info.get("flags", {}).get("png", "")
     }
+
+def salvar_paises_bd(paises):
+    conexao = sqlite3.connect("paises.db")
+    cursor = conexao.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS paises (
+            nome_comum TEXT, nome_oficial TEXT, capital TEXT,
+            continente TEXT, regiao TEXT, sub_regiao TEXT,
+            populacao INTEGER, area REAL, moeda TEXT,
+            simbolo_moeda TEXT, idioma TEXT, fuso_horario TEXT,
+            bandeira TEXT
+        )
+    ''')
+    
+    for pais in paises:
+        cursor.execute('''
+            INSERT INTO paises VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            pais["nome_comum"], pais["nome_oficial"], pais["capital"],
+            pais["continente"], pais["regiao"], pais["sub_regiao"],
+            pais["populacao"], pais["area"], pais["moeda"],
+            pais["simbolo_moeda"], pais["idioma"], pais["fuso_horario"],
+            pais["bandeira"]
+        ))
+    
+    conexao.commit()
+    conexao.close()
+
+def main():
+    dados_paises = []
+    qtd_paises = 0
+    max_tentativas = 3 
+
+    while len(dados_paises) < max_tentativas:
+        qtd_paises += 1
+        pais = input(f"Digite o nome de 3 países, lembre-se de escrever em INGLÊS e SEM ACENTOS.\n {qtd_paises}º país: ").strip()
+        
+        print(f"\nBuscando dados de {pais}...") 
+        dados = coletar_dados_pais(pais)
+        
+        if dados:
+            dados_paises.append(dados)
+            print(f"Dados de '{pais}' coletados com sucesso!")
+        else:
+            print(f"País '{pais}' não encontrado. Tente novamente.\n")
+            qtd_paises -= 1  
+    
+    salvar_paises_bd(dados_paises)
+    return dados_paises
