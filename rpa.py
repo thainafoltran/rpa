@@ -88,3 +88,29 @@ def main():
     
     salvar_paises_bd(dados_paises)
     return dados_paises
+
+# PARTE 2 - LIVROS
+def extrair_livros():
+    url = "https://books.toscrape.com"
+    response = requests.get(url)
+    if response.status_code != 200:
+        return []
+    
+    soup = BeautifulSoup(response.text, "html.parser")
+    livros = []
+   
+    for artigo in soup.find_all("article", class_="product_pod")[:10]:
+        titulo = artigo.h3.a["title"]
+        preco = artigo.find("p", class_="price_color").text.strip()
+        avaliacao = artigo.find("p", class_="star-rating")["class"][1]
+        disponibilidade = artigo.find("p", class_="instock availability").text.strip()
+
+        livros.append({
+            "titulo": titulo,
+            "preco": preco,
+            "avaliacao": avaliacao,
+            "disponibilidade": disponibilidade
+        })
+ 
+       
+    return livros
