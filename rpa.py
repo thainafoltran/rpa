@@ -114,3 +114,40 @@ def extrair_livros():
  
        
     return livros
+
+def salvar_livros_bd(livros):
+    conectar = sqlite3.connect("livraria.db")
+    cursor = conectar.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS livros (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            titulo TEXT,
+            preco REAL,
+            avaliacao TEXT,
+            disponibilidade TEXT
+        )
+    ''')
+
+    for livro in livros:
+        cursor.execute('''
+            INSERT INTO livros (titulo, preco, avaliacao, disponibilidade)
+            VALUES (?, ?, ?, ?)
+        ''', (livro["titulo"], livro["preco"], livro["avaliacao"], livro["disponibilidade"]))
+    
+    conectar.commit()
+    conectar.close()
+
+dez_livros = extrair_livros()
+if dez_livros:
+    salvar_livros_bd(dez_livros)
+
+
+
+if __name__ == "__main__":
+    dados_paises = main()
+    livros = extrair_livros()
+    salvar_livros_bd(livros)
+
+ 
+    wb = Workbook()
