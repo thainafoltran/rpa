@@ -1,3 +1,4 @@
+import requests
 import sqlite3
 from bs4 import BeautifulSoup
 from openpyxl import Workbook
