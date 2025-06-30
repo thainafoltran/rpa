@@ -151,3 +151,21 @@ if __name__ == "__main__":
 
  
     wb = Workbook()
+
+    #PLANILHA PAÍSES
+    planilha1 = wb.active
+    planilha1.title = "Paises"
+    cabecalhos_paises = ["Nome Comum", "Nome Oficial", "Capital", "Continente", "Região", "SubRegião",
+                        "População", "Área", "Nome Moeda", "Símbolo Moeda", "Idioma", "Fuso Horário", "Bandeira"]
+    planilha1.append(["Aluno:", "Thainá Foltran"])
+    planilha1.append(["O arquivo foi gerado em:", datetime.now().strftime("%d/%m/%Y")])
+    planilha1.append(cabecalhos_paises)
+
+    for pais in dados_paises:
+        planilha1.append([
+            pais["nome_comum"], pais["nome_oficial"], pais["capital"],
+            pais["continente"], pais["regiao"], pais["sub_regiao"],
+            pais["populacao"], pais["area"], pais["moeda"],
+            pais["simbolo_moeda"], pais["idioma"], pais["fuso_horario"],
+            pais["bandeira"]
+        ])
